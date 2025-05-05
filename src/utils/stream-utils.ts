@@ -42,16 +42,16 @@ export function transformSSEStream() {
   });
 }
 
-export function toObjectStream<T>() {
-  return new TransformStream<string, T>({
+export function toObjectStream<P, T>() {
+  return new TransformStream<P, T>({
     transform: (chunk, controller) => {
-      controller.enqueue(JSON.parse(chunk));
+      controller.enqueue(JSON.parse(chunk as string));
     },
   });
 }
 
 export class TransformableReadableStream<T extends unknown> {
-  constructor(private readableStream: ReadableStream<T>) {}
+  constructor(private readableStream: ReadableStream<T>) { }
 
   /**
    * @description The default readable stream output.
@@ -65,9 +65,9 @@ export class TransformableReadableStream<T extends unknown> {
    * @description Converts a string-encoded object stream to a typed object stream.
    * @returns A new TransformableReadableStream of objects
    */
-  toReadableObjectStream = <TObj>(): TransformableReadableStream<TObj> => {
+  toReadableObjectStream = <TObj extends Record<string, unknown>>(): TransformableReadableStream<TObj> => {
     const transformedStream = this.readableStream.pipeThrough(
-      toObjectStream<TObj>()
+      toObjectStream<T, TObj>()
     );
     return new TransformableReadableStream<TObj>(transformedStream);
   };

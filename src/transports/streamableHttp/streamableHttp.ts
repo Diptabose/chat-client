@@ -1,11 +1,12 @@
 import type { Transport } from "../..//types/transport.js";
 import {
   toDecodedReadableStream,
+  TransformableReadableStream,
   transformSSEStream,
 } from "../../utils/stream-utils.js";
 
 export class StreambleHttpTransport implements Transport {
-  constructor(private url: string) {}
+  constructor(private url: string) { }
 
   send = async (
     url?: string,
@@ -26,9 +27,9 @@ export class StreambleHttpTransport implements Transport {
     if (response.body) {
       return {
         response: Promise.resolve(response),
-        readableStream: toDecodedReadableStream(response.body).pipeThrough(
+        readableStream: new TransformableReadableStream(toDecodedReadableStream(response.body).pipeThrough(
           transformSSEStream()
-        ),
+        )),
       };
     }
 

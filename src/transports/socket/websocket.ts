@@ -1,5 +1,5 @@
 import type { Transport } from "../../types/transport.js";
-import { Streamable } from "../../utils/stream-utils.js";
+import { Streamable, TransformableReadableStream } from "../../utils/stream-utils.js";
 
 type SocketPayload = { event: string; payload: unknown };
 type SocketCallback<T extends SocketPayload> = (
@@ -108,7 +108,7 @@ export class WebSocketTransport implements Transport {
       },
     });
 
-    return { response, readableStream };
+    return { response, readableStream: new TransformableReadableStream(readableStream)};
   };
 
   close = () => {

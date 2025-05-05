@@ -1,4 +1,4 @@
-import { Streamable } from "../../utils/stream-utils.js";
+import { Streamable, TransformableReadableStream } from "../../utils/stream-utils.js";
 import { parseEventStream } from "../../utils/event-stream-parser.js";
 import { isNullOrUndefined } from "../../utils/utils.js";
 import type { Transport } from "../../types/transport.js";
@@ -86,7 +86,7 @@ export class SSETransport implements Transport {
       },
     });
 
-    return { response, readableStream };
+    return { response, readableStream: new TransformableReadableStream(readableStream) };
   };
 
   close = () => {

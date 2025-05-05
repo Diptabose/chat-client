@@ -1,3 +1,5 @@
+import { TransformableReadableStream } from "src/utils/stream-utils.js";
+
 export interface Transport {
   send(
     url?: string,
@@ -5,7 +7,7 @@ export interface Transport {
     options?: Omit<RequestInit, "body">
   ): Promise<{
     response: Promise<Response>;
-    readableStream: ReadableStream<string> | null;
+    readableStream: TransformableReadableStream<string> | null;
   }>;
   close(): void;
 }
