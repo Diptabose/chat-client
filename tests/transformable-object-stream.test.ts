@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
 import {
-  TransformableReadableStream,
   TransformableObjectReadableStream,
 } from "../src/utils/stream-utils";
 
@@ -32,9 +31,16 @@ describe("TranformableObjectReadableStream", () => {
   });
 
 
-  
-
-
-
+  it("converts stream to async iterable", async () => {
+     const testSample = { data: { text: "test" } };
+    const rs = createStream(testSample, 10, 10);
+    const ts = new TransformableObjectReadableStream(rs);
+    let count = 0;
+    for await (const chunk of ts.toAsyncIterable()) {
+      expect(chunk).toBe(testSample);
+      count++;
+    }
+    expect(count).toBe(10);
+  });
 
 });

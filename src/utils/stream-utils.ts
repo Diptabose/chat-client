@@ -110,4 +110,5 @@ export class TransformableObjectReadableStream<
   constructor(readableStream: ReadableStream<T>) {
     super(readableStream);
   }
+  // Any new methods can be introduced here.
 }

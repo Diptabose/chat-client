@@ -51,14 +51,14 @@ export class Client<
       if (this._options?.objectMode) {
         return {
           response,
-          readableStream: readableStream?.pipeThrough(toObjectStream()),
+          readableStream: readableStream?.toReadableObjectStream()?.toStream(),
         } as unknown as SendReturnType<Options>;
       }
       return { readableStream, response } as unknown as SendReturnType<Options>;
     }
 
     if (!this._options?.stream) {
-      const reader = readableStream?.getReader();
+      const reader = readableStream?.toStream()?.getReader();
       const chunks: string[] = [];
       if (reader) {
         while (true) {
