@@ -67,6 +67,14 @@ describe("TransformableReadableStream", () => {
     expect(text).toBe("Hello world".repeat(10));
   });
 
+
+  it("converts stream to array", async () => {
+    const rs = createStream("Hello world", 10, 10);
+    const ts = new TransformableReadableStream(rs);
+    const streamedArray = await ts.toArray();
+    expect(streamedArray).toEqual(Array.from({length:10}).fill("Hello world"));
+  });
+
   it("streams objects as async iterable", async () => {
     const rs = createStream(sample, 10, 10);
     const ts = new TransformableReadableStream(rs);

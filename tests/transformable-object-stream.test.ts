@@ -32,7 +32,7 @@ describe("TranformableObjectReadableStream", () => {
 
 
   it("converts stream to async iterable", async () => {
-     const testSample = { data: { text: "test" } };
+    const testSample = { data: { text: "test" } };
     const rs = createStream(testSample, 10, 10);
     const ts = new TransformableObjectReadableStream(rs);
     let count = 0;
@@ -41,6 +41,13 @@ describe("TranformableObjectReadableStream", () => {
       count++;
     }
     expect(count).toBe(10);
+  });
+
+  it("converts stream to array", async () => {
+    const rs = createStream({ data: { text: "test" } }, 10, 10);
+    const ts = new TransformableObjectReadableStream(rs);
+    const streamedArray = await ts.toArray();
+    expect(streamedArray).toEqual(Array.from({ length: 10 }).fill({ data: { text: "test" } }));
   });
 
 });

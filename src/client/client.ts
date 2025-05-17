@@ -1,5 +1,4 @@
 import type { Transport } from "../types/transport.js";
-import { toObjectStream,  } from "../utils/stream-utils.js";
 
 
 export type StreamResponse = {
@@ -19,10 +18,10 @@ export type ContentResponse = {
 
 export type SendReturnType<Options extends { stream: boolean; objectMode: boolean }> =
   Options["stream"] extends false
-    ? ContentResponse
-    : Options["objectMode"] extends true
-    ? ObjectStreamResponse
-    : StreamResponse;
+  ? ContentResponse
+  : Options["objectMode"] extends true
+  ? ObjectStreamResponse
+  : StreamResponse;
 
 export class Client<
   Options extends { stream: boolean; objectMode: boolean } = {
@@ -30,7 +29,7 @@ export class Client<
     stream: true;
   }
 > {
-  constructor(private _transport: Transport, private _options: Options) {}
+  constructor(private _transport: Transport, private _options: Options) { }
 
   transport = (transport: Transport) => {
     this._transport = transport;
@@ -58,18 +57,10 @@ export class Client<
     }
 
     if (!this._options?.stream) {
-      const reader = readableStream?.toStream()?.getReader();
-      const chunks: string[] = [];
-      if (reader) {
-        while (true) {
-          const { value, done } = await reader.read();
-          if (done) break;
-          chunks.push(value);
-        }
-      }
+      const chunks = await readableStream?.toArray();
       return {
         response,
-        content: chunks.join(" "),
+        content: chunks?.join(" "),
       } as unknown as SendReturnType<Options>;
     }
 

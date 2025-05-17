@@ -45,14 +45,14 @@ export function transformSSEStream() {
 export function toObjectStream<P, T>() {
   return new TransformStream<P, T>({
     transform: (chunk, controller) => {
-     
+
       controller.enqueue(JSON.parse(chunk as string));
     },
   });
 }
 
 export abstract class TransformableStream<T extends unknown> {
-  constructor(protected readableStream: ReadableStream<T>) {}
+  constructor(protected readableStream: ReadableStream<T>) { }
 
   toStream = () => {
     return this.readableStream;
@@ -66,6 +66,17 @@ export abstract class TransformableStream<T extends unknown> {
       yield value;
     }
   }
+
+  toArray = async (): Promise<string[]> => {
+    let chunks = [];
+    const reader = this.readableStream.getReader();
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      chunks.push(value as string)
+    }
+    return chunks;
+  };
 }
 
 export class TransformableReadableStream<
@@ -98,10 +109,13 @@ export class TransformableReadableStream<
     while (true) {
       const { value, done } = await reader.read();
       if (done) break;
-      text += value;
+      text += value
     }
     return text;
   };
+
+
+
 }
 
 export class TransformableObjectReadableStream<
