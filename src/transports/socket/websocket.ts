@@ -69,7 +69,7 @@ export class WebSocketTransport implements Transport {
   };
 
   send = async (
-    url?: string,
+    url: string = this.url.toString(),
     data?: Record<string, unknown>,
     options?: Omit<RequestInit, "body">
   ) => {
@@ -108,7 +108,7 @@ export class WebSocketTransport implements Transport {
       },
     });
 
-    return { response, readableStream: new TransformableReadableStream(readableStream)};
+    return { response, readableStream: new TransformableReadableStream(readableStream) };
   };
 
   close = () => {

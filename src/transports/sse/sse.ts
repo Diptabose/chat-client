@@ -39,7 +39,7 @@ export class SSETransport implements Transport {
   };
 
   send = async (
-    url: string,
+    url: string = this.url,
     data?: Record<string, unknown>,
     options?: Omit<RequestInit, "body">
   ) => {
