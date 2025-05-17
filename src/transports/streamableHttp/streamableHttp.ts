@@ -23,7 +23,7 @@ export class StreambleHttpTransport implements Transport {
     }
 
 
-    const response = await fetch(url ?? this.url, {
+    const response = await fetch(url, {
       ...options,
       method: "POST",
       body: JSON.stringify(data),

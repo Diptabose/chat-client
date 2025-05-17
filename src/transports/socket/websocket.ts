@@ -98,7 +98,7 @@ export class WebSocketTransport implements Transport {
       }
     );
 
-    const response = fetch(url ?? this.url, {
+    const response = fetch(url, {
       method: "POST",
       ...options,
       body: JSON.stringify(data),

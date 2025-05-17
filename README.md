@@ -73,7 +73,7 @@ const wsTransport = new WebSocketTransport("ws://localhost:4000", {
 ### 2. Create a `Client`
 
 ```ts
-import { Client } from "@diptabose/chat-client";
+import { Client } from "@diptabose/chat-client/client/client";
 
 const client = new Client(wsTransport, {
   stream: true,
@@ -201,7 +201,7 @@ You can build your own transport by implementing:
 ```ts
 export interface Transport {
   send(
-    url?: string,
+    url: string,
     data?: Record<string, unknown>,
     options?: Omit<RequestInit, "body">
   ): Promise<{ response: Promise<Response>, readableStream: ReadableStream | null }>;

@@ -76,7 +76,7 @@ export class SSETransport implements Transport {
       }
     );
 
-    const response = fetch(url ?? this.url, {
+    const response = fetch(url, {
       ...options,
       method: "POST",
       body: JSON.stringify(data),
