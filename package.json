@@ -15,6 +15,7 @@
     "connector",
     "chat connector"
   ],
+  "repository": "https://github.com/Diptabose/chat-client",
   "publishConfig": {
     "access": "public"
   },
