@@ -1,0 +1,53 @@
+{
+  "name": "@diptabose/chat-client",
+  "version": "1.0.2",
+  "keywords": [
+    "chat",
+    "stream",
+    "client",
+    "stream-client",
+    "chat-client",
+    "sse",
+    "server-sent-events",
+    "websockets stream",
+    "streaming",
+    "streamable http",
+    "connector",
+    "chat connector"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    "./*": {
+      "import": "./dist/esm/*",
+      "require": "./dist/cjs/*"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/esm/*"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p tsconfig.esm.json && echo {\"type\": \"module\"} > dist/esm/package.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json && echo {\"type\": \"commonjs\"} > dist/cjs/package.json",
+    "prepack": "npm run build:esm && npm run build:cjs",
+    "test": "vitest"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "tslib": "^2.6.2",
+    "vitest": "^3.1.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
