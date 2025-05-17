@@ -2,8 +2,6 @@ import { describe, it, expect } from "vitest";
 import { parseEventStream } from "../src/utils/event-stream-parser.js"
 
 
-
-
 describe("event stream parser functionality", () => {
 
     it("should parse the normal stream text", () => {

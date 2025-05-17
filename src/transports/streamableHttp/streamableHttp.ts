@@ -6,13 +6,23 @@ import {
 } from "../../utils/stream-utils.js";
 
 export class StreambleHttpTransport implements Transport {
-  constructor(private url: string) { }
+
+  private abortController: AbortController
+  constructor(private url: string) {
+    this.abortController = new AbortController();
+  }
 
   send = async (
     url?: string,
     data?: Record<string, unknown>,
     options?: Omit<RequestInit, "body">
   ) => {
+
+    if (this.abortController.signal.aborted) {
+      this.abortController = new AbortController();
+    }
+
+
     const response = await fetch(url ?? this.url, {
       ...options,
       method: "POST",
@@ -22,6 +32,7 @@ export class StreambleHttpTransport implements Transport {
         "Content-Type": "application/json",
         ...options?.headers,
       },
+      signal: options?.signal ?? this.abortController.signal
     });
 
     if (response.body) {
@@ -38,5 +49,6 @@ export class StreambleHttpTransport implements Transport {
 
   close = () => {
     // Use our own abort controller
+    this.abortController.abort();
   };
 }
