@@ -6,11 +6,11 @@ A TypeScript SDK for streaming server responses in various transport modes such 
 
 ## ✨ Features
 
-* 🔄 Unified streaming interface
-* ⚙️ Pluggable transport layer (WebSocket, SSE, HTTP)
-* 🧠 Support for object and text streaming
-* ❌ Graceful abort & close handling
-* 🔌 Easy transport switching
+- 🔄 Unified streaming interface
+- ⚙️ Pluggable transport layer (WebSocket, SSE, HTTP)
+- 🧠 Support for object and text streaming
+- ❌ Graceful abort & close handling
+- 🔌 Easy transport switching
 
 ---
 
@@ -40,12 +40,13 @@ export type ContentResponse = {
   content: string;
 };
 
-export type SendReturnType<Options extends { stream: boolean; objectMode: boolean }> =
-  Options["stream"] extends false
-    ? ContentResponse
-    : Options["objectMode"] extends true
-    ? ObjectStreamResponse
-    : StreamResponse;
+export type SendReturnType<
+  Options extends { stream: boolean; objectMode: boolean }
+> = Options["stream"] extends false
+  ? ContentResponse
+  : Options["objectMode"] extends true
+  ? ObjectStreamResponse
+  : StreamResponse;
 ```
 
 ---
@@ -56,9 +57,9 @@ export type SendReturnType<Options extends { stream: boolean; objectMode: boolea
 
 You can use one of the following transports:
 
-* `WebSocketTransport`
-* `SSETransport`
-* `StreambleHttpTransport`
+- `WebSocketTransport`
+- `SSETransport`
+- `StreambleHttpTransport`
 
 ```ts
 import { WebSocketTransport } from "@diptabose/chat-client/transports/websocket";
@@ -102,8 +103,8 @@ while (true) {
 
 ### ✅ WebSocketTransport
 
-* Listens for server-side events via WebSocket.
-* Sends an HTTP POST to initiate the stream.
+- Listens for server-side events via WebSocket.
+- Sends an HTTP POST to initiate the stream.
 
 ```ts
 new WebSocketTransport("ws://localhost:4000", { eventName: "message" });
@@ -111,7 +112,7 @@ new WebSocketTransport("ws://localhost:4000", { eventName: "message" });
 
 ### ✅ SSETransport
 
-* Uses `EventSource` to listen to SSE streams.
+- Uses `EventSource` to listen to SSE streams.
 
 ```ts
 new SSETransport("/events", { eventName: "data" });
@@ -119,7 +120,7 @@ new SSETransport("/events", { eventName: "data" });
 
 ### ✅ StreambleHttpTransport
 
-* Sends an HTTP POST and receives `text/event-stream` over `fetch()`.
+- Sends an HTTP POST and receives `text/event-stream` over `fetch()`.
 
 ```ts
 new StreambleHttpTransport("/stream");
@@ -137,12 +138,12 @@ new Client(transport: Transport, options: { stream: boolean, objectMode: boolean
 
 #### `send(url?: string, data?: object, options?: RequestInit)`
 
-* Returns a response + stream object
-* Respects `AbortSignal`
+- Returns a response + stream object
+- Respects `AbortSignal`
 
 #### `transport(newTransport: Transport)`
 
-* Dynamically switch transport at runtime
+- Dynamically switch transport at runtime
 
 ---
 
@@ -188,9 +189,9 @@ while (true) {
 
 ## 🛠️ Utilities Used
 
-* `Streamable` - wraps `ReadableStream` with controller
-* `TransformableReadableStream` - transforms stream data
-* `parseEventStream` - parses SSE chunked data
+- `Streamable` - wraps `ReadableStream` with controller
+- `TransformableReadableStream` - transforms stream data
+- `parseEventStream` - parses SSE chunked data
 
 ---
 
@@ -204,8 +205,11 @@ export interface Transport {
     url: string,
     data?: Record<string, unknown>,
     options?: Omit<RequestInit, "body">
-  ): Promise<{ response: Promise<Response>, readableStream: ReadableStream | null }>;
-
+  ): Promise<{
+    response: Promise<Response>;
+    readableStream: ReadableStream | null;
+  }>;
+  transportUrl: () => string | URL;
   close(): void;
 }
 ```
