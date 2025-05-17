@@ -2,6 +2,7 @@ import { Streamable, TransformableReadableStream } from "../../utils/stream-util
 import { parseEventStream } from "../../utils/event-stream-parser.js";
 import { isNullOrUndefined } from "../../utils/utils.js";
 import type { Transport } from "../../types/transport.js";
+import { createParser } from "eventsource-parser";
 
 export type EventSourceCallback<T = unknown> = (
   this: EventSource,
@@ -93,15 +94,17 @@ export class SSETransport implements Transport {
     removeListenerEvent = this.addEventListener<string>(
       this.options.eventName,
       (event: MessageEvent) => {
-        const parsedChunks = parseEventStream<string>(event.data);
-        for (const chunk of parsedChunks) {
-          if (isNullOrUndefined(chunk)) {
-            controller?.close();
-            removeListenerEvent?.();
-            break;
-          }
-          controller?.enqueue(chunk);
-        }
+
+        const parser = createParser({
+          onEvent(event) {
+            if (isNullOrUndefined(event) || isNullOrUndefined(event.data)) {
+              controller?.close();
+              removeListenerEvent?.();
+            }
+            controller?.enqueue(event.data);
+          },
+        })
+        parser.feed(event.data);
       },
       {
         signal: options?.signal as AbortSignal,

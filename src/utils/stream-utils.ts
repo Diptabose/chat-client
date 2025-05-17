@@ -1,3 +1,5 @@
+import { EventSourceParserStream } from "eventsource-parser/stream";
+
 export function toDecodedReadableStream(reader: ReadableStream<Uint8Array>) {
   const readerInstance = reader.getReader();
   const decoder = new TextDecoder();
@@ -30,6 +32,10 @@ export class Streamable {
   }
 }
 
+import { createParser, EventSourceMessage } from 'eventsource-parser';
+
+
+
 export function transformSSEStream() {
   return new TransformStream<string, string>({
     transform: (chunk, controller) => {
@@ -39,6 +45,26 @@ export function transformSSEStream() {
         controller.enqueue(payload);
       }
     },
+  });
+}
+
+
+export function transformSSEStreams() {
+
+  let controller: TransformStreamDefaultController<string>;
+  let parser = createParser({
+    onEvent(event) {
+      controller.enqueue(event.data);
+    },
+  });
+
+  return new TransformStream<string, string>({
+    start(ctrl) {
+      controller = ctrl;
+    },
+    transform(chunk) {
+      parser.feed(chunk);
+    }
   });
 }
 

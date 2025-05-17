@@ -3,7 +3,9 @@ import {
   toDecodedReadableStream,
   TransformableReadableStream,
   transformSSEStream,
+  transformSSEStreams,
 } from "../../utils/stream-utils.js";
+import { EventSourceParserStream } from "eventsource-parser/stream";
 
 
 export class StreambleHttpTransport implements Transport {
@@ -70,7 +72,7 @@ export class StreambleHttpTransport implements Transport {
       return {
         response: Promise.resolve(response),
         readableStream: new TransformableReadableStream(toDecodedReadableStream(response.body).pipeThrough(
-          transformSSEStream()
+          transformSSEStreams()
         )),
       };
     }
