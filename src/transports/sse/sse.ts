@@ -38,11 +38,43 @@ export class SSETransport implements Transport {
     };
   };
 
-  send = async (
-    url: string = this.url,
+
+  // Overload 1: User passes only data and options (use constructor url)
+  send(
     data?: Record<string, unknown>,
     options?: Omit<RequestInit, "body">
-  ) => {
+  ): Promise<{
+    response: Promise<Response>;
+    readableStream: TransformableReadableStream<string> | null;
+  }>;
+
+  // Overload 2: User passes a URL too
+  send(
+    url: string,
+    data?: Record<string, unknown>,
+    options?: Omit<RequestInit, "body">
+  ): Promise<{
+    response: Promise<Response>;
+    readableStream: TransformableReadableStream<string> | null;
+  }>;
+
+  async send(
+    urlOrData?: string | Record<string, unknown>,
+    maybeData?: Record<string, unknown>,
+    options?: Omit<RequestInit, "body">
+  ) {
+
+    let url: string;
+    let data: Record<string, unknown> | undefined;
+
+    if (typeof urlOrData === "string") {
+      url = urlOrData;
+      data = maybeData;
+    } else {
+      url = this.url;
+      data = urlOrData;
+      options = maybeData as Omit<RequestInit, "body">;
+    }
     let removeListenerEvent: (() => void) | null = null;
 
     const streamble = new Streamable();

@@ -15,7 +15,7 @@ export class WebSocketTransport implements Transport {
   private socketEventCallbackMap = new Map<string, SocketUserCallback>();
 
   constructor(
-    private url: string | URL,
+    private url: string,
     private options: {
       eventName: string;
       protocols?: string | string[];
@@ -68,11 +68,42 @@ export class WebSocketTransport implements Transport {
     };
   };
 
-  send = async (
-    url: string = this.url.toString(),
+
+  // Overload 1: User passes only data and options (use constructor url)
+  send(
     data?: Record<string, unknown>,
     options?: Omit<RequestInit, "body">
-  ) => {
+  ): Promise<{
+    response: Promise<Response>;
+    readableStream: TransformableReadableStream<string> | null;
+  }>;
+
+  // Overload 2: User passes a URL too
+  send(
+    url: string,
+    data?: Record<string, unknown>,
+    options?: Omit<RequestInit, "body">
+  ): Promise<{
+    response: Promise<Response>;
+    readableStream: TransformableReadableStream<string> | null;
+  }>;
+
+  async send(
+    urlOrData?: string | Record<string, unknown>,
+    maybeData?: Record<string, unknown>,
+    options?: Omit<RequestInit, "body">
+  ) {
+    let url: string;
+    let data: Record<string, unknown> | undefined;
+
+    if (typeof urlOrData === "string") {
+      url = urlOrData;
+      data = maybeData;
+    } else {
+      url = this.url;
+      data = urlOrData;
+      options = maybeData as Omit<RequestInit, "body">;
+    }
     const streamble = new Streamable();
     const { controller, readableStream } =
       await streamble.getControllableReadableStream<string>();
