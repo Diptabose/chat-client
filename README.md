@@ -17,7 +17,7 @@ A TypeScript SDK for streaming server responses in various transport modes such 
 ## 📦 Installation
 
 ```bash
-npm install @your-org/stream-client
+npm install @diptabose/chat-client
 ```
 
 ---
@@ -61,7 +61,7 @@ You can use one of the following transports:
 * `StreambleHttpTransport`
 
 ```ts
-import { WebSocketTransport } from "@your-org/stream-client/transports/websocket";
+import { WebSocketTransport } from "@diptabose/chat-client/transports/websocket";
 
 const wsTransport = new WebSocketTransport("ws://localhost:4000", {
   eventName: "message",
@@ -73,7 +73,7 @@ const wsTransport = new WebSocketTransport("ws://localhost:4000", {
 ### 2. Create a `Client`
 
 ```ts
-import { Client } from "@your-org/stream-client";
+import { Client } from "@diptabose/chat-client";
 
 const client = new Client(wsTransport, {
   stream: true,
