@@ -21,14 +21,15 @@
   },
   "exports": {
     "./*": {
-      "import": "./dist/esm/*",
-      "require": "./dist/cjs/*"
+      "import": "./dist/esm/*.js",
+      "require": "./dist/cjs/*.js",
+      "types": "./dist/esm/*.d.ts"
     }
   },
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/esm/*"
+        "dist/esm/*.d.ts"
       ]
     }
   },
