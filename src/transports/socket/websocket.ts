@@ -111,6 +111,10 @@ export class WebSocketTransport implements Transport {
     return { response, readableStream: new TransformableReadableStream(readableStream) };
   };
 
+  transportUrl = () => {
+    return this.url
+  };
+
   close = () => {
     this.socketEventMap.forEach((value) => {
       this.socket.removeEventListener("message", value);

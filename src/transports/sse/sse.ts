@@ -89,6 +89,10 @@ export class SSETransport implements Transport {
     return { response, readableStream: new TransformableReadableStream(readableStream) };
   };
 
+  transportUrl = () => {
+    return this.url
+  };
+
   close = () => {
     this.eventSourceMap.forEach((value, key) => {
       this.eventSource.removeEventListener(key, value);

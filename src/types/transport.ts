@@ -9,5 +9,7 @@ export interface Transport {
     response: Promise<Response>;
     readableStream: TransformableReadableStream<string> | null;
   }>;
+
+  transportUrl: () => string | URL,
   close(): void;
 }

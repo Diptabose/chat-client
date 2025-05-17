@@ -36,7 +36,7 @@ export class Client<
   };
 
   send = async (
-    url?: string,
+    url: string = this._transport.transportUrl().toString(),
     data?: Record<string, unknown>,
     options?: Omit<RequestInit, "body">
   ): Promise<SendReturnType<Options>> => {

@@ -47,6 +47,10 @@ export class StreambleHttpTransport implements Transport {
     return { response: Promise.resolve(response), readableStream: null };
   };
 
+  transportUrl = () => {
+    return this.url;
+  };
+
   close = () => {
     // Use our own abort controller
     this.abortController.abort();
